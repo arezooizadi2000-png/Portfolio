@@ -1,0 +1,6 @@
+{
+  "name": "Narrative Design Portfolio",
+  "description": "A premium, highly interactive professional portfolio website for a game narrative designer, featuring full writing scripts, an interactive branching story player, visual quest maps, and certificates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
