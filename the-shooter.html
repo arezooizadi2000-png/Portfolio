@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Shooter – Arezoo Izadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Barlow+Condensed:wght@300;400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --bg:         #0E0E10;
+    --surface:    #16161A;
+    --surface2:   #1E1E24;
+    --border:     rgba(255,255,255,0.08);
+    --border2:    rgba(255,255,255,0.14);
+    --cream:      #F0EBE0;
+    --gold:       #C9A96E;
+    --gold-dark:  #A07840;
+    --red:        #C94B4B;
+    --red-dim:    rgba(201,75,75,0.15);
+    --slate:      #6B7FA3;
+    --text:       #E8E4DC;
+    --text-mid:   #C4C0B8;
+    --text-faint: #9A9690;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ── Scanline grain ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(14,14,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+  .nav-back {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold); }
+  .nav-back::before { content: '←'; }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--text-mid);
+    font-style: italic;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── Page wrapper ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 1; }
+
+  section { padding: 5rem 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .eyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .section-rule {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ════════════════════════════
+     HERO
+  ════════════════════════════ */
+  #hero {
+    padding: 0;
+    border-top: none;
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,75,75,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(107,127,163,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(201,169,110,0.07) 0%, transparent 40%);
+    z-index: 0;
+  }
+
+  /* Animated crosshair */
+  .hero-crosshair {
+    position: absolute;
+    top: 50%;
+    right: 12%;
+    transform: translate(50%, -50%);
+    width: 340px;
+    height: 340px;
+    opacity: 0.06;
+    animation: rotateSlow 30s linear infinite;
+    z-index: 0;
+  }
+  @keyframes rotateSlow {
+    from { transform: translate(50%, -50%) rotate(0deg); }
+    to   { transform: translate(50%, -50%) rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2.5rem 5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1.5px;
+    background: var(--red);
+  }
+
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(4rem, 11vw, 8rem);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+  h1 span {
+    display: block;
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .hero-logline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-style: italic;
+    color: var(--text-mid);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--red);
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .hero-chip {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    padding: 5px 14px;
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+  }
+
+  .hero-scroll {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .hero-scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--text-faint);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { width: 40px; opacity: 0.4; }
+    50% { width: 60px; opacity: 1; }
+  }
+
+  /* ════════════════════════════
+     SYNOPSIS
+  ════════════════════════════ */
+  .synopsis-text {
+    font-size: 15.5px;
+    color: var(--text-mid);
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+  }
+  .synopsis-text strong { color: var(--text); font-weight: 700; }
+  .synopsis-text em { color: var(--gold); font-style: italic; }
+
+  .attribution-box {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    background: var(--surface);
+    font-size: 13px;
+    color: var(--text-mid);
+  }
+
+  /* ════════════════════════════
+     CHARACTERS
+  ════════════════════════════ */
+  .char-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 640px) { .char-duo { grid-template-columns: 1fr; } }
+
+  .char-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+  .char-card-accent {
+    height: 3px;
+    width: 100%;
+  }
+  .char-card-accent.jane { background: linear-gradient(90deg, var(--red), transparent); }
+  .char-card-accent.jake { background: linear-gradient(90deg, var(--slate), transparent); }
+
+  .char-card-body { padding: 1.75rem; }
+  .char-role {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .char-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 1.25rem;
+  }
+  .char-name.jane { color: var(--red); }
+  .char-name.jake { color: var(--slate); }
+
+  .char-desc {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+
+  .char-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.25rem;
+  }
+  .char-trait {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border2);
+    color: var(--text-mid);
+  }
+
+  .char-details { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; }
+  .char-detail-row {
+    background: var(--surface2);
+    padding: 0.6rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 12px;
+  }
+  .char-detail-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .char-detail-value { color: var(--text-mid); font-size: 13px; text-align: right; }
+
+  /* ════════════════════════════
+     SETTING
+  ════════════════════════════ */
+  .setting-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .setting-panel-header {
+    background: var(--surface2);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .setting-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .setting-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding: 4px 12px;
+    border: 1px solid rgba(201,75,75,0.3);
+    border-radius: 99px;
+  }
+  .setting-panel-body { padding: 2rem; }
+  .setting-body-text {
+    font-size: 14.5px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 1rem;
+  }
+
+  /* Level progression visual */
+  .level-progression {
+    margin-top: 1.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .level-tier {
+    background: var(--surface2);
+    padding: 1.1rem 1.25rem;
+  }
+  .level-tier-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .level-tier-label.low { color: var(--gold); }
+  .level-tier-label.mid { color: var(--slate); }
+  .level-tier-label.high { color: var(--red); }
+  .level-tier-desc { font-size: 12px; color: var(--text-mid); line-height: 1.55; }
+
+  /* ════════════════════════════
+     ACTS & MISSIONS (carousel)
+  ════════════════════════════ */
+  .acts-section { padding-bottom: 3rem; }
+
+  .act-block { margin-bottom: 4rem; }
+  .act-block:last-child { margin-bottom: 0; }
+
+  .act-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .act-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .act-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .act-title em { color: var(--red); font-style: normal; }
+
+  .act-desc {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+  }
+
+  /* Carousel track */
+  .carousel-wrap {
+    position: relative;
+  }
+  .carousel-track-outer {
+    overflow: hidden;
+    border-radius: 14px;
+    cursor: grab;
+    user-select: none;
+  }
+  .carousel-track-outer:active { cursor: grabbing; }
+  .carousel-track {
+    display: flex;
+    gap: 12px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  /* Mission card */
+  .mission-card {
+    flex: 0 0 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.6rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+  }
+  .mission-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+  .mission-card.optional {
+    border-style: dashed;
+    opacity: 0.8;
+  }
+  .mission-card.optional:hover { opacity: 1; }
+
+  /* Ambient number in background */
+  .mission-bg-num {
+    position: absolute;
+    bottom: -0.5rem;
+    right: 0.75rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 6rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .mission-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.1rem;
+    gap: 0.5rem;
+  }
+  .mission-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .mission-num.optional-num { color: var(--gold); }
+  .mission-optional-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 3px 8px;
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 99px;
+  }
+
+  .mission-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 0.85rem;
+  }
+  .mission-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .mission-mechanic {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  .mission-mechanic::before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 1.5px;
+    background: var(--slate);
+    flex-shrink: 0;
+  }
+
+  /* Carousel nav dots + arrows */
+  .carousel-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  .carousel-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border2);
+    transition: background 0.2s, width 0.2s;
+    cursor: pointer;
+  }
+  .carousel-dot.active {
+    background: var(--red);
+    width: 20px;
+    border-radius: 99px;
+  }
+  .carousel-arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text-mid);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .carousel-btn:hover {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+  }
+  .carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ════════════════════════════
+     FADE-IN
+  ════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .fade-up:nth-child(1) { animation-delay: 0.05s; }
+  .fade-up:nth-child(2) { animation-delay: 0.15s; }
+  .fade-up:nth-child(3) { animation-delay: 0.25s; }
+  .fade-up:nth-child(4) { animation-delay: 0.35s; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--text-faint); }
+  .footer-note { font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 1.25rem; }
+    .page { padding: 0 1.25rem; }
+    h1 { font-size: 3.5rem; }
+    .mission-card { flex: 0 0 240px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="index.html" class="nav-back">Portfolio</a>
+  <span class="nav-title">The Shooter</span>
+  <ul class="nav-links">
+    <li><a href="#synopsis">Synopsis</a></li>
+    <li><a href="#characters">Characters</a></li>
+    <li><a href="#setting">Setting</a></li>
+    <li><a href="#acts">Missions</a></li>
+  </ul>
+</nav>
+
+
+<!-- ════════════════════════════
+     HERO
+════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Crosshair SVG -->
+  <svg class="hero-crosshair" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="170" cy="170" r="160" stroke="white" stroke-width="1"/>
+    <circle cx="170" cy="170" r="100" stroke="white" stroke-width="0.5" stroke-dasharray="6 6"/>
+    <circle cx="170" cy="170" r="40" stroke="white" stroke-width="1"/>
+    <line x1="170" y1="0" x2="170" y2="120" stroke="white" stroke-width="1"/>
+    <line x1="170" y1="220" x2="170" y2="340" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="170" x2="120" y2="170" stroke="white" stroke-width="1"/>
+    <line x1="220" y1="170" x2="340" y2="170" stroke="white" stroke-width="1"/>
+    <circle cx="170" cy="170" r="4" fill="white"/>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-tag fade-up">Game Narrative Design · Action</span>
+    <h1 class="fade-up">
+      The<br>
+      <span>Shooter</span>
+    </h1>
+    <p class="hero-logline fade-up">
+      After years of recovery and relentless training, Dead-Eye Jane returns to the League of Shooters with one goal: expose the man who rigged her brother's death and take back everything he stole.
+    </p>
+    <div class="hero-tags fade-up">
+      <span class="hero-chip">Mission-based</span>
+      <span class="hero-chip">Three-act structure</span>
+      <span class="hero-chip">Character-driven</span>
+      <span class="hero-chip">Branching ending</span>
+    </div>
+    <div class="hero-scroll">
+      <span class="hero-scroll-line"></span>
+      Scroll to read
+    </div>
+  </div>
+</section>
+
+
+<div class="page">
+
+<!-- ════════════════════════════
+     SYNOPSIS
+════════════════════════════ -->
+<section id="synopsis">
+  <span class="eyebrow">Narrative</span>
+  <div class="section-header">
+    <h2>Synopsis</h2>
+    <hr class="section-rule">
+  </div>
+
+  <p class="synopsis-text">Dead-Eye Jane was once one of the League of Shooters' most promising rising talents — until a single night of calculated violence ended her brother <strong>Jacob's</strong> life and cost her an eye.</p>
+
+  <p class="synopsis-text">It began with a rigged match. <strong>Jake</strong> and his associate Alan, threatened by Jacob's growing reputation in the League, secretly swapped live rounds for blanks before the game. Jacob was shot dead. Jane — targeted to eliminate the only witness — took a bullet to her right eye instead. The chaos they engineered didn't leave them untouched: Alan was killed by a stray shot, and Jake suffered a fall that shattered his leg. It should have finished him. Instead, Jake leveraged the disorder he created to seize the League's presidency, burying the truth beneath layers of political power and rigged competition.</p>
+
+  <p class="synopsis-text">Years later, Jane walks back into the League's halls. She goes by <em>Dead-Eye Jane</em> now. She has spent every day of her recovery training — harder, sharper, and with a clarity of purpose that leaves no room for doubt. Jacob's weapons are at her side. The whispers start the moment she signs her name at the registration desk: <em>she's back.</em> Across the room, Jake stands at the centre of a group of men, cane in hand and a scornful smile on his face. <em>"Well, if it ain't Dead-Eye Jane. Come to lose again?"</em></p>
+
+  <p class="synopsis-text">Jane doesn't answer. She lets her performance speak — cutting through the early levels with the precision of someone who has been preparing for exactly this. But the opposition is more than competitive. An old friend, <strong>Emily</strong>, confirms what Jane already suspected: Jake has systematically rigged the League's structure to protect his inner circle and push out anyone who poses a genuine threat. Jane's return isn't just personal — it's a disruption to an entire corrupt ecosystem.</p>
+
+  <p class="synopsis-text">As the levels grow harder, so does the interference. Voice guides are manipulated, directions are falsified, and Jake's presence is felt even when he isn't in the room. His voice cuts in at moments of pressure: <em>"You think I regret what I did? Jacob was weak. And you? Stubborn and naive."</em> When Jane is briefly injured by what should have been a controlled drill, she confronts Jake directly — forcing into the open his role in Alan's death, Jacob's murder, and the institution he has hollowed out for his own gain. The confrontation ends with one demand: a one-on-one match. Jake agrees, certain he has already won.</p>
+
+  <p class="synopsis-text">He hasn't. In their final battle, Jane takes a graze from a live round, recognises the trick immediately, and turns his overconfidence against him. She shoots him in both legs. He falls. Standing over him, she delivers her verdict: <em>"Get your dirty claws out of this place, Jake. It was never yours to begin with."</em> One final strike closes the chapter.</p>
+
+  <p class="synopsis-text">With Jake removed, the League begins to breathe again. Jane doesn't celebrate. She has brought justice to Jacob's memory — and that, for now, is enough.</p>
+
+  <div class="attribution-box">
+    Developed as part of a Game Narrative Design certificate on Coursera. The original story premise was provided by the course instructor; the narrative rewrite, character voice, and structural development are my own work.
+  </div>
+</section>
+
+
+<!-- ════════════════════════════
+     CHARACTERS
+════════════════════════════ -->
+<section id="characters">
+  <span class="eyebrow">Cast</span>
+  <div class="section-header">
+    <h2>Characters</h2>
+    <hr class="section-rule">
+  </div>
+
+  <div class="char-duo">
+
+    <!-- Jane -->
+    <div class="char-card">
+      <div class="char-card-accent jane"></div>
+      <div class="char-card-body">
+        <span class="char-role">Protagonist</span>
+        <p class="char-name jane">Dead-Eye Jane</p>
+        <p class="char-desc">Black hair in a tight ponytail. A black eye-patch over her right eye — the permanent mark of the night that changed everything. Her jumpsuit cycles through dark greens and navy blues, short-sleeved to show the tattoos beneath: the most prominent, a gun with drops of blood falling from the barrel. Jacob's weapon rides on her hip. It never leaves.</p>
+        <p class="char-desc">To those she trusts, Jane is fiercely loyal and genuinely warm. But when it comes to Jake, that clarity can fracture. Her rage is a resource she hasn't fully learned to manage. What steadies her — always — is the memory of Jacob's smile. Soft and unhurried, it's the image she carries into every confrontation.</p>
+        <div class="char-traits">
+          <span class="char-trait">Resilient</span>
+          <span class="char-trait">Determined</span>
+          <span class="char-trait">Agile</span>
+          <span class="char-trait">Fiercely loyal</span>
+          <span class="char-trait">Rage-driven</span>
+          <span class="char-trait">Quietly tender</span>
+        </div>
+        <div class="char-details">
+          <div class="char-detail-row">
+            <span class="char-detail-label">Weapon</span>
+            <span class="char-detail-value">Jacob's — always</span>
+          </div>
+          <div class="char-detail-row">
+            <span class="char-detail-label">Defining feature</span>
+            <span class="char-detail-value">Black eye-patch, right eye</span>
+          </div>
+          <div class="char-detail-row">
+            <span class="char-detail-label">Arc</span>
+            <span class="char-detail-value">Grief → justice → release</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jake -->
+    <div class="char-card">
+      <div class="char-card-accent jake"></div>
+      <div class="char-card-body">
+        <span class="char-role">Antagonist</span>
+        <p class="char-name jake">Jake</p>
+        <p class="char-desc">Tall and broad-shouldered, he dresses with deliberate casualness: jeans, t-shirt sleeves rolled to the elbow. He always carries a pocket knife and never goes anywhere without his cane — the legacy of the fall that should have ended his career. He could manage without it. He chooses not to. The sound of it striking the floor down a corridor is enough to change the atmosphere of a room before he even enters it.</p>
+        <p class="char-desc">He has no regret over Jacob's death. None over Alan's. The League is his, built on manipulation and buried evidence — and he intends to keep it that way. He has never met an opponent who didn't break. He doesn't know what to do with one who won't.</p>
+        <div class="char-traits">
+          <span class="char-trait">Ruthless</span>
+          <span class="char-trait">Power-hungry</span>
+          <span class="char-trait">Strategically cruel</span>
+          <span class="char-trait">Intimidating</span>
+          <span class="char-trait">Unrepentant</span>
+        </div>
+        <div class="char-details">
+          <div class="char-detail-row">
+            <span class="char-detail-label">Signature</span>
+            <span class="char-detail-value">Cane, pocket knife</span>
+          </div>
+          <div class="char-detail-row">
+            <span class="char-detail-label">Position</span>
+            <span class="char-detail-value">League President</span>
+          </div>
+          <div class="char-detail-row">
+            <span class="char-detail-label">Weakness</span>
+            <span class="char-detail-value">Overconfidence</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════
+     SETTING
+════════════════════════════ -->
+<section id="setting">
+  <span class="eyebrow">World-building</span>
+  <div class="section-header">
+    <h2>Setting</h2>
+    <hr class="section-rule">
+  </div>
+
+  <div class="setting-panel">
+    <div class="setting-panel-header">
+      <span class="setting-name">The Shooting Field</span>
+      <span class="setting-tag">Dynamic Environment</span>
+    </div>
+    <div class="setting-panel-body">
+      <p class="setting-body-text">The Shooting Field is a concrete room that grows with the player — expanding in both size and psychological pressure as the levels advance. It is never just a backdrop. It is an active participant in the difficulty, and at its most hostile, a physical reflection of the rigged and manipulated world Jane is fighting to dismantle.</p>
+      <p class="setting-body-text">In the early levels, the field is spare and contained: concrete walls, static targets, windows that show nothing beyond them — just more grey, as though the world outside doesn't exist. The lighting shifts between cold green and flat grey, never settling. A wall fan hums. Speakers occupy each corner, silent for now.</p>
+      <p class="setting-body-text">As the levels climb, the environment begins to push back. Targets start moving. The speakers come alive — and in the harder levels, the guidance they offer turns unreliable, issuing misdirection dressed as instruction. The lighting shifts mid-level at the worst possible moments, forcing a reset of focus precisely when the player can least afford it.</p>
+
+      <div class="level-progression">
+        <div class="level-tier">
+          <span class="level-tier-label low">Early levels</span>
+          <p class="level-tier-desc">Contained room. Static targets. Cold green and grey lighting. Silent speakers.</p>
+        </div>
+        <div class="level-tier">
+          <span class="level-tier-label mid">Mid levels</span>
+          <p class="level-tier-desc">Moving targets. Voice guides activate. Lighting begins to shift mid-round.</p>
+        </div>
+        <div class="level-tier">
+          <span class="level-tier-label high">Hard levels</span>
+          <p class="level-tier-desc">Voices turn deceptive. Live opponents. Faulty gear. Maze arena finale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════
+     ACTS & MISSIONS
+════════════════════════════ -->
+<section id="acts" class="acts-section">
+  <span class="eyebrow">Gameplay & level design</span>
+  <div class="section-header">
+    <h2>Acts &amp; Missions</h2>
+    <hr class="section-rule">
+  </div>
+
+  <p style="font-size:14px; color:var(--text-mid); margin-bottom:3rem; max-width:560px;">Three acts. Twelve core missions. Five optional. Swipe through each act below — optional missions are marked in gold.</p>
+
+  <!-- ACT I -->
+  <div class="act-block">
+    <div class="act-header">
+      <span class="act-number">Act I</span>
+    </div>
+    <p class="act-title">The <em>Reawakening</em></p>
+    <p class="act-desc">Jane returns to the League. The world meets her with taunts and whispers. The player learns the mechanics while the story sets its stakes.</p>
+
+    <div class="carousel-wrap" data-carousel="1">
+      <div class="carousel-track-outer">
+        <div class="carousel-track">
+
+          <div class="mission-card">
+            <span class="mission-bg-num">1</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 01</span>
+            </div>
+            <p class="mission-title">Return &amp; Reload</p>
+            <p class="mission-desc">Jane signs up at the League. Jake's contempt arrives immediately. A flashback to Jacob's death sets the emotional stakes before the player fires a single shot. The core mechanics are introduced through tutorial play.</p>
+            <span class="mission-mechanic">Tutorial · Cutscene · Flashback</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">2</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 02</span>
+            </div>
+            <p class="mission-title">League Trials I</p>
+            <p class="mission-desc">A standard timed challenge that teaches the rhythm of competitive play and what it means to perform under the League's rules. The field is fair — for now.</p>
+            <span class="mission-mechanic">Timing challenge · Standard rules</span>
+          </div>
+
+          <div class="mission-card optional">
+            <span class="mission-bg-num">★</span>
+            <div class="mission-top">
+              <span class="mission-num optional-num">Optional</span>
+              <span class="mission-optional-badge">Bonus</span>
+            </div>
+            <p class="mission-title">Training Day</p>
+            <p class="mission-desc">An extended return to fundamentals for players who want deeper mechanical grounding. No narrative stakes — just time, precision, and repetition.</p>
+            <span class="mission-mechanic">Extended tutorial</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">3</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 03</span>
+            </div>
+            <p class="mission-title">Bonds</p>
+            <p class="mission-desc">A mission featuring differently shaped targets, followed by a cutscene: Jane reconnects with Emily, and together they piece together the full shape of Jake's betrayal and what it cost Jacob.</p>
+            <span class="mission-mechanic">Varied targets · Story cutscene</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">4</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 04</span>
+            </div>
+            <p class="mission-title">Sabotage</p>
+            <p class="mission-desc">Jane discovers a hidden gear room Jake has been concealing from the League. What she finds there hardens her resolve. She isn't here to compete. She's here to win.</p>
+            <span class="mission-mechanic">Discovery · Gear unlock</span>
+          </div>
+
+          <div class="mission-card optional">
+            <span class="mission-bg-num">★</span>
+            <div class="mission-top">
+              <span class="mission-num optional-num">Optional</span>
+              <span class="mission-optional-badge">Bonus</span>
+            </div>
+            <p class="mission-title">Memorial</p>
+            <p class="mission-desc">Jane visits Jacob's grave and makes her promise out loud for the first time. The only mission set outdoors — a quiet, open field instead of concrete walls.</p>
+            <span class="mission-mechanic">Outdoor setting · Emotional beat</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-nav">
+        <div class="carousel-dots" id="dots-1"></div>
+        <div class="carousel-arrows">
+          <button class="carousel-btn" data-dir="prev" data-target="1">&#8592;</button>
+          <button class="carousel-btn" data-dir="next" data-target="1">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT II -->
+  <div class="act-block">
+    <div class="act-header">
+      <span class="act-number">Act II</span>
+    </div>
+    <p class="act-title">Eye On The <em>Enemy</em></p>
+    <p class="act-desc">The League shows its teeth. Jake's interference moves from passive obstruction to active sabotage — and Jane begins to fight a system designed to reject her.</p>
+
+    <div class="carousel-wrap" data-carousel="2">
+      <div class="carousel-track-outer">
+        <div class="carousel-track">
+
+          <div class="mission-card">
+            <span class="mission-bg-num">5</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 05</span>
+            </div>
+            <p class="mission-title">League Trials II</p>
+            <p class="mission-desc">An intentionally rigged match. Jane's gear is faulty — some targets don't register, others score zero. The arena voices eventually reveal the tampering, halfway through, when it's already done its damage.</p>
+            <span class="mission-mechanic">Faulty gear · Revelatory voice cues</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">6</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 06</span>
+            </div>
+            <p class="mission-title">Unruly</p>
+            <p class="mission-desc">Jake escalates. Jane now faces two live opponents alongside the moving targets. A new mechanic is introduced: the ability to slow time, giving the player a critical edge in moments of chaos.</p>
+            <span class="mission-mechanic">New mechanic: slow-time · Live opponents</span>
+          </div>
+
+          <div class="mission-card optional">
+            <span class="mission-bg-num">★</span>
+            <div class="mission-top">
+              <span class="mission-num optional-num">Optional</span>
+              <span class="mission-optional-badge">Bonus</span>
+            </div>
+            <p class="mission-title">The Log</p>
+            <p class="mission-desc">Jane finds Alan's old journal. In it, the setup of Jacob's death is documented in Alan's own hand — the clearest evidence yet. It fuels her into the final stretch of the act.</p>
+            <span class="mission-mechanic">Lore discovery · Motivation boost</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">7</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 07</span>
+            </div>
+            <p class="mission-title">Network Down</p>
+            <p class="mission-desc">Jane and Emily hack Jake's surveillance system, cutting off his ability to interfere in real time. Jane completes the level cleanly, and walks away with upgraded gear.</p>
+            <span class="mission-mechanic">Interference-free · Gear upgrade</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">8</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 08</span>
+            </div>
+            <p class="mission-title">Fire on the Front</p>
+            <p class="mission-desc">A public duel against Jake's most trusted lieutenant, who has publicly bet against Jane. Victory here unravels the lies Jake has told his inner circle. The cracks begin to show.</p>
+            <span class="mission-mechanic">Public duel · Alliance fracture</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-nav">
+        <div class="carousel-dots" id="dots-2"></div>
+        <div class="carousel-arrows">
+          <button class="carousel-btn" data-dir="prev" data-target="2">&#8592;</button>
+          <button class="carousel-btn" data-dir="next" data-target="2">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACT III -->
+  <div class="act-block">
+    <div class="act-header">
+      <span class="act-number">Act III</span>
+    </div>
+    <p class="act-title">One Last <em>Round</em></p>
+    <p class="act-desc">Jane brings everything into the open and forces the confrontation the whole game has been building toward. The ending is not fixed — the player decides Jake's fate.</p>
+
+    <div class="carousel-wrap" data-carousel="3">
+      <div class="carousel-track-outer">
+        <div class="carousel-track">
+
+          <div class="mission-card">
+            <span class="mission-bg-num">9</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 09</span>
+            </div>
+            <p class="mission-title">League Trials III</p>
+            <p class="mission-desc">Jake's most elaborate sabotage yet: rigged opponents, compromised gear, corrupted directions. The player must use every tool and technique accumulated across both previous acts to survive it.</p>
+            <span class="mission-mechanic">All mechanics combined · Maximum difficulty</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">10</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 10</span>
+            </div>
+            <p class="mission-title">Uncovered</p>
+            <p class="mission-desc">Jane goes public. Jake's lies are leaked to the entire League, and the fallout forces both parties into agreement: a final duel, one-on-one, in a maze arena. The terms are set.</p>
+            <span class="mission-mechanic">Story revelation · Final terms set</span>
+          </div>
+
+          <div class="mission-card optional">
+            <span class="mission-bg-num">★</span>
+            <div class="mission-top">
+              <span class="mission-num optional-num">Optional</span>
+              <span class="mission-optional-badge">Bonus</span>
+            </div>
+            <p class="mission-title">Gunsmith</p>
+            <p class="mission-desc">A trial run through the maze, and a chance to help Emily build a prototype weapon before the final match. Completing this gives Jane a meaningful edge going into the last level.</p>
+            <span class="mission-mechanic">Maze preview · Prototype weapon</span>
+          </div>
+
+          <div class="mission-card optional">
+            <span class="mission-bg-num">★</span>
+            <div class="mission-top">
+              <span class="mission-num optional-num">Optional</span>
+              <span class="mission-optional-badge">Bonus</span>
+            </div>
+            <p class="mission-title">Reflection</p>
+            <p class="mission-desc">A final flashback played as Jacob. A rare shift in perspective that reframes everything. Completing it unlocks a letter Jacob wrote to Jane — never sent, now finally read.</p>
+            <span class="mission-mechanic">Play as Jacob · Unlockable letter</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">11</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 11</span>
+            </div>
+            <p class="mission-title">Final Shot</p>
+            <p class="mission-desc">Jane enters the maze. Twists, traps, and confrontations accumulate toward the moment the game has been building to since its opening cutscene. Everything she has learned, here, now.</p>
+            <span class="mission-mechanic">Maze arena · Climactic duel</span>
+          </div>
+
+          <div class="mission-card">
+            <span class="mission-bg-num">12</span>
+            <div class="mission-top">
+              <span class="mission-num">Mission 12</span>
+            </div>
+            <p class="mission-title">The Clearing</p>
+            <p class="mission-desc">The aftermath. A dialogue-heavy final level in which Jake's defeat is processed by everyone who witnessed it. In the game's closing moments, the player makes one last choice: exile or death. Jane's revenge is complete either way.</p>
+            <span class="mission-mechanic">Branching ending · Player choice</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-nav">
+        <div class="carousel-dots" id="dots-3"></div>
+        <div class="carousel-arrows">
+          <button class="carousel-btn" data-dir="prev" data-target="3">&#8592;</button>
+          <button class="carousel-btn" data-dir="next" data-target="3">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /page -->
+
+<footer>
+  <span class="footer-name">Arezoo Izadi</span>
+  <span class="footer-note">Narrative Designer · 2025</span>
+</footer>
+
+<script>
+  // ── Carousel logic ──
+  document.querySelectorAll('[data-carousel]').forEach(wrap => {
+    const id       = wrap.dataset.carousel;
+    const track    = wrap.querySelector('.carousel-track');
+    const cards    = wrap.querySelectorAll('.mission-card');
+    const dotsWrap = document.getElementById('dots-' + id);
+    const prevBtn  = wrap.querySelector('[data-dir="prev"]');
+    const nextBtn  = wrap.querySelector('[data-dir="next"]');
+
+    let current = 0;
+    const cardWidth = () => cards[0].offsetWidth + 12; // gap = 12px
+    const visibleCount = () => Math.floor(wrap.querySelector('.carousel-track-outer').offsetWidth / cardWidth());
+    const maxIndex = () => Math.max(0, cards.length - visibleCount());
+
+    // Build dots
+    cards.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(idx) {
+      current = Math.max(0, Math.min(idx, maxIndex()));
+      track.style.transform = `translateX(-${current * cardWidth()}px)`;
+      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current >= maxIndex();
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    // Touch/drag support
+    let startX = 0, isDragging = false;
+    const outer = wrap.querySelector('.carousel-track-outer');
+
+    outer.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+    outer.addEventListener('mousemove', e => { if (!isDragging) return; });
+    outer.addEventListener('mouseup', e => {
+      if (!isDragging) return;
+      isDragging = false;
+      const diff = startX - e.clientX;
+      if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+    });
+    outer.addEventListener('mouseleave', () => { isDragging = false; });
+
+    outer.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    outer.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+    }, { passive: true });
+
+    goTo(0);
+  });
+</script>
+
+</body>
+</html>
