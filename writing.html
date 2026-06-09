@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Samples — Arezoo Izadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --cream:      #FDFBF6;
+    --warm-white: #FAF7F0;
+    --parchment:  #F0EBE0;
+    --border:     #E2D9C8;
+    --gold:       #C9A96E;
+    --gold-dark:  #A07840;
+    --ink:        #1E1B16;
+    --ink-mid:    #3D3830;
+    --ink-light:  #6B6356;
+    --ink-faint:  #9A9288;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(253,251,246,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+  .nav-back {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold-dark); }
+  .nav-back::before { content: '←'; }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* ── Page ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── Hero ── */
+  .page-hero {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+  .eyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.75rem;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  h1 em { font-style: italic; color: var(--gold-dark); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--ink-light);
+    max-width: 520px;
+    line-height: 1.75;
+  }
+
+  /* ── Writing grid ── */
+  .writing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 6rem;
+  }
+
+  /* ── Writing card ── */
+  .writing-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .writing-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(30,27,22,0.09);
+  }
+
+  .writing-accent { height: 4px; width: 100%; }
+  .accent-frankenstein { background: linear-gradient(90deg, #7A4A9A, #C4887A); }
+  .accent-life        { background: linear-gradient(90deg, #4A7A9A, #7ABFAA); }
+  .accent-world       { background: linear-gradient(90deg, #7A9A4A, #C9A96E); }
+  .accent-duchess     { background: linear-gradient(90deg, #9A4A4A, #C9A96E); }
+
+  .writing-body { padding: 1.75rem 1.75rem 1.5rem; }
+
+  .writing-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .writing-publication {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+  }
+  .writing-date {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    background: var(--parchment);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+
+  .writing-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
+  }
+
+  .writing-genre-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    margin-bottom: 1rem;
+  }
+
+  .writing-excerpt {
+    font-size: 13.5px;
+    color: var(--ink-light);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+
+  .writing-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  .writing-view-link {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .writing-view-link::after { content: '→'; }
+  .writing-ext-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    text-decoration: none;
+    background: var(--warm-white);
+    transition: background 0.2s, color 0.2s;
+  }
+  .writing-ext-btn:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ════════════════════════════════
+     DETAIL OVERLAY
+  ════════════════════════════════ */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(30,27,22,0.55);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .overlay.open { display: flex; }
+
+  .detail-panel {
+    background: var(--cream);
+    border-radius: 20px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(30,27,22,0.2);
+    position: relative;
+  }
+
+  .detail-accent { height: 5px; width: 100%; border-radius: 20px 20px 0 0; }
+
+  .detail-body { padding: 2.5rem; }
+
+  .detail-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-light);
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .detail-close:hover { background: var(--parchment); }
+
+  .detail-pub {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .detail-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .detail-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-meta-item {
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .detail-meta-item::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .detail-desc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .detail-desc {
+    font-size: 14.5px;
+    color: var(--ink-mid);
+    line-height: 1.85;
+    margin-bottom: 2rem;
+  }
+  .detail-placeholder {
+    background: var(--parchment);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    font-size: 13px;
+    color: var(--ink-faint);
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+
+  /* Excerpt pull-quote */
+  .detail-pullquote {
+    border-left: 3px solid var(--gold);
+    padding: 0.75rem 1.25rem;
+    background: var(--warm-white);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    padding: 12px 24px;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold-dark); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--ink-light); }
+  .footer-note { font-size: 11px; color: var(--ink-faint); }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .page { padding: 0 1.1rem; }
+    .writing-grid { grid-template-columns: 1fr; }
+    .page-hero { padding: 3rem 0 2.5rem; }
+    h1 { font-size: 2.2rem; }
+    .detail-body { padding: 1.5rem; }
+    footer { padding: 1.5rem 1.1rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="index.html" class="nav-back">Portfolio</a>
+  <span class="nav-title">Writing Samples</span>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <span class="eyebrow">Published work</span>
+    <h1>Writing <em>Samples</em></h1>
+    <p class="hero-sub">Articles, reviews, and event reports published in Litlog — the cultural journalism eMagazine of the University of Göttingen. Click any card to read more, or open the article directly.</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="writing-grid">
+
+    <!-- 1 — Frankenstein -->
+    <div class="writing-card" onclick="openDetail('frankenstein')">
+      <div class="writing-accent accent-frankenstein"></div>
+      <div class="writing-body">
+        <div class="writing-meta-row">
+          <span class="writing-publication">Litlog</span>
+          <span class="writing-date">July 2023</span>
+        </div>
+        <p class="writing-title">Frankenstein, the Queer and the Mother</p>
+        <span class="writing-genre-tag">Literary Analysis · Essay</span>
+        <p class="writing-excerpt">A queer reading of Mary Shelley's Frankenstein — on anti-normativity, the erasure of motherhood, and Victor Frankenstein's queer act of fatherhood.</p>
+        <div class="writing-cta">
+          <span class="writing-view-link">Read more</span>
+          <a href="https://www.litlog.de/frankenstein-the-queer-and-the-mother/" target="_blank" class="writing-ext-btn" onclick="event.stopPropagation()">Read on Litlog ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 — Meaning of Life -->
+    <div class="writing-card" onclick="openDetail('life')">
+      <div class="writing-accent accent-life"></div>
+      <div class="writing-body">
+        <div class="writing-meta-row">
+          <span class="writing-publication">Litlog</span>
+          <span class="writing-date">December 2023</span>
+        </div>
+        <p class="writing-title">Exploring the Meaning of Life</p>
+        <span class="writing-genre-tag">Event Report · Science</span>
+        <p class="writing-excerpt">A report on Nobel Prize winner Sir Paul Nurse's talk at the Göttinger Literaturherbst, where he answered the perennial question: what is life?</p>
+        <div class="writing-cta">
+          <span class="writing-view-link">Read more</span>
+          <a href="https://www.litlog.de/exploring-the-meaning-of-life/" target="_blank" class="writing-ext-btn" onclick="event.stopPropagation()">Read on Litlog ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 — Sharing an Undivided World -->
+    <div class="writing-card" onclick="openDetail('world')">
+      <div class="writing-accent accent-world"></div>
+      <div class="writing-body">
+        <div class="writing-meta-row">
+          <span class="writing-publication">Litlog</span>
+          <span class="writing-date">February 2024</span>
+        </div>
+        <p class="writing-title">Sharing an (Un)Divided World</p>
+        <span class="writing-genre-tag">Event Report · Anthropology</span>
+        <p class="writing-excerpt">A report on anthropologist Farhan Samanani's talk at the Literaturherbst, exploring how multicultural communities coexist — and what we can learn from them.</p>
+        <div class="writing-cta">
+          <span class="writing-view-link">Read more</span>
+          <a href="https://www.litlog.de/sharing-an-undivided-world/" target="_blank" class="writing-ext-btn" onclick="event.stopPropagation()">Read on Litlog ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 — The Duchess -->
+    <div class="writing-card" onclick="openDetail('duchess')">
+      <div class="writing-accent accent-duchess"></div>
+      <div class="writing-body">
+        <div class="writing-meta-row">
+          <span class="writing-publication">Litlog</span>
+          <span class="writing-date">November 2024</span>
+        </div>
+        <p class="writing-title">The Story of the Duchess: Lucrezia, the Tigress</p>
+        <span class="writing-genre-tag">Book Review · Historical Fiction</span>
+        <p class="writing-excerpt">A review of Maggie O'Farrell's The Marriage Portrait — on Lucrezia de' Medici, womanhood under patriarchy, and the healing power of art.</p>
+        <div class="writing-cta">
+          <span class="writing-view-link">Read more</span>
+          <a href="https://www.litlog.de/the-story-of-the-duchess-lucrezia-the-tigress/" target="_blank" class="writing-ext-btn" onclick="event.stopPropagation()">Read on Litlog ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page -->
+
+
+<!-- ════════════════════════════════
+     DETAIL OVERLAYS
+════════════════════════════════ -->
+
+<!-- Frankenstein -->
+<div class="overlay" id="detail-frankenstein" onclick="closeOnBg(event, 'frankenstein')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-frankenstein"></div>
+    <button class="detail-close" onclick="closeDetail('frankenstein')">✕</button>
+    <div class="detail-body">
+      <span class="detail-pub">Litlog · Literary Analysis</span>
+      <h2 class="detail-title">Frankenstein, the Queer and the Mother</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Essay</span>
+        <span class="detail-meta-item">July 2023</span>
+        <span class="detail-meta-item">Solo byline</span>
+        <span class="detail-meta-item">11 min read</span>
+      </div>
+      <div class="detail-pullquote">
+        "Frankenstein already resists future-oriented politics when he eradicates motherhood; however, what makes the case of the female monster more distinct is the fact that Frankenstein eliminates any possibility of a reproductive future for the creature and by extension, for himself."
+      </div>
+      <span class="detail-desc-label">About this piece</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what drew you to this topic, your angle, what you were trying to argue. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="https://www.litlog.de/frankenstein-the-queer-and-the-mother/" target="_blank" class="btn-primary">↗ Read on Litlog</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Exploring the Meaning of Life -->
+<div class="overlay" id="detail-life" onclick="closeOnBg(event, 'life')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-life"></div>
+    <button class="detail-close" onclick="closeDetail('life')">✕</button>
+    <div class="detail-body">
+      <span class="detail-pub">Litlog · Event Report</span>
+      <h2 class="detail-title">Exploring the Meaning of Life</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Science reporting</span>
+        <span class="detail-meta-item">December 2023</span>
+        <span class="detail-meta-item">Co-written with Jaeeun Kim</span>
+        <span class="detail-meta-item">4 min read</span>
+      </div>
+      <div class="detail-pullquote">
+        "It is not every day that you have the opportunity to sit in front of a Nobel Prize winner and listen to his answer to the perennial question of 'What is life?'"
+      </div>
+      <span class="detail-desc-label">About this piece</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what the event was like, what stood out to you, what made this piece interesting to write. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="https://www.litlog.de/exploring-the-meaning-of-life/" target="_blank" class="btn-primary">↗ Read on Litlog</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sharing an Undivided World -->
+<div class="overlay" id="detail-world" onclick="closeOnBg(event, 'world')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-world"></div>
+    <button class="detail-close" onclick="closeDetail('world')">✕</button>
+    <div class="detail-body">
+      <span class="detail-pub">Litlog · Event Report</span>
+      <h2 class="detail-title">Sharing an (Un)Divided World</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Anthropology &amp; culture</span>
+        <span class="detail-meta-item">February 2024</span>
+        <span class="detail-meta-item">Co-written with Jaeeun Kim</span>
+        <span class="detail-meta-item">5 min read</span>
+      </div>
+      <div class="detail-pullquote">
+        "Instead of considering difference as a source of conflict, Samanani shows examples of places where difference does not cause conflict but becomes a chance to understand diversity."
+      </div>
+      <span class="detail-desc-label">About this piece</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what drew you to this talk, what you took from it, what made it worth writing about. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="https://www.litlog.de/sharing-an-undivided-world/" target="_blank" class="btn-primary">↗ Read on Litlog</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Duchess -->
+<div class="overlay" id="detail-duchess" onclick="closeOnBg(event, 'duchess')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-duchess"></div>
+    <button class="detail-close" onclick="closeDetail('duchess')">✕</button>
+    <div class="detail-body">
+      <span class="detail-pub">Litlog · Book Review</span>
+      <h2 class="detail-title">The Story of the Duchess: Lucrezia, the Tigress</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Historical fiction</span>
+        <span class="detail-meta-item">November 2024</span>
+        <span class="detail-meta-item">Solo byline</span>
+        <span class="detail-meta-item">5 min read</span>
+      </div>
+      <div class="detail-pullquote">
+        "One can feel empowered by Lucrezia's character as she fights for her art, her heart, and at times, for her life."
+      </div>
+      <span class="detail-desc-label">About this piece</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — why this book, what you wanted to highlight, what your critical angle was. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="https://www.litlog.de/the-story-of-the-duchess-lucrezia-the-tigress/" target="_blank" class="btn-primary">↗ Read on Litlog</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <span class="footer-name">Arezoo Izadi</span>
+  <span class="footer-note">Narrative Designer · 2025</span>
+</footer>
+
+<script>
+  function openDetail(id) {
+    document.getElementById('detail-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDetail(id) {
+    document.getElementById('detail-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeOnBg(event, id) {
+    if (event.target === event.currentTarget) closeDetail(id);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.overlay.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
