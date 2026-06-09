@@ -639,11 +639,32 @@
 
   /* ── Responsive ── */
   @media (max-width: 600px) {
-    nav { padding: 0 1.25rem; }
-    .page { padding: 0 1.25rem; }
-    .project-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 10px; letter-spacing: 0.06em; }
+    .nav-links .nav-contact { padding: 6px 14px; font-size: 10px; }
+    .page { padding: 0 1.1rem; }
+    section { padding: 3rem 0; }
+    #hero { padding: 3.5rem 0 2.5rem; }
     h1 { font-size: 2.6rem; }
-    #hero { padding: 4rem 0 3rem; }
+    .hero-bio { font-size: 15px; }
+    .hero-cta { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 14px 20px; }
+    .skills-strip { grid-template-columns: 1fr 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
+    .project-thumb { height: 160px; }
+    .writing-grid { grid-template-columns: 1fr; }
+    .cert-grid { grid-template-columns: 1fr 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-heading { font-size: 1.8rem; }
+    .section-header h2 { font-size: 1.5rem; }
+    footer { padding: 1.5rem 1.1rem; flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  }
+  @media (max-width: 380px) {
+    .skills-strip { grid-template-columns: 1fr; }
+    .cert-grid { grid-template-columns: 1fr; }
+    .nav-links { gap: 0.5rem; }
+    .hero-tags { gap: 0.3rem; }
   }
 
   /* ── Fade-in on load ── */
@@ -855,9 +876,6 @@
   </section>
 
 
-  <!-- ════════════════════════════════════
-       CERTIFICATES
-  ════════════════════════════════════ -->
   <section id="certificates">
     <span class="eyebrow">Education &amp; credentials</span>
     <div class="section-header">
@@ -866,28 +884,42 @@
     </div>
 
     <div class="cert-grid">
+      <a href="certificates.html" class="cert-card" style="text-decoration:none;">
+        <div style="height:3px; background:linear-gradient(90deg,#00AEEF,#005F8E);"></div>
+        <div style="padding:1.4rem 1.5rem;">
+          <span class="cert-issuer">CalArts · Coursera</span>
+          <p class="cert-name">Story and Narrative Development for Video Games</p>
+          <span class="cert-year">2025</span>
+        </div>
+      </a>
+      <a href="certificates.html" class="cert-card" style="text-decoration:none;">
+        <div style="height:3px; background:linear-gradient(90deg,#C99700,#002855);"></div>
+        <div style="padding:1.4rem 1.5rem;">
+          <span class="cert-issuer">UC Davis · Coursera</span>
+          <p class="cert-name">Google SEO Fundamentals</p>
+          <span class="cert-year">2025</span>
+        </div>
+      </a>
+      <a href="certificates.html" class="cert-card" style="text-decoration:none;">
+        <div style="height:3px; background:linear-gradient(90deg,#4A3828,#A07840);"></div>
+        <div style="padding:1.4rem 1.5rem;">
+          <span class="cert-issuer">Georg-August-Universität Göttingen</span>
+          <p class="cert-name">Litlog — Editorial Internship</p>
+          <span class="cert-year">2023</span>
+        </div>
+      </a>
+      <a href="certificates.html" class="cert-card" style="text-decoration:none;">
+        <div style="height:3px; background:linear-gradient(90deg,#7A4A9A,#C94B4B);"></div>
+        <div style="padding:1.4rem 1.5rem;">
+          <span class="cert-issuer">ENLIGHT · University of Göttingen</span>
+          <p class="cert-name">AI in Today's Written World — ENLIGHT Programme</p>
+          <span class="cert-year">2023</span>
+        </div>
+      </a>
+    </div>
 
-      <!-- ✏️ PLACEHOLDER — replace with your actual certificates.
-           Template:
-           <div class="cert-card">
-             <span class="cert-issuer">Coursera / Udemy / University name</span>
-             <p class="cert-name">Certificate or course name</p>
-             <span class="cert-year">2024</span>
-           </div>
-      -->
-      <div class="cert-card placeholder">
-        <p class="cert-name">Your certificate will go here</p>
-      </div>
-      <div class="cert-card placeholder">
-        <p class="cert-name">Your certificate will go here</p>
-      </div>
-      <div class="cert-card placeholder">
-        <p class="cert-name">Your certificate will go here</p>
-      </div>
-      <div class="cert-card placeholder">
-        <p class="cert-name">Your certificate will go here</p>
-      </div>
-
+    <div style="text-align:center; margin-top:1.5rem;">
+      <a href="certificates.html" class="btn-secondary" style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); padding:12px 28px; border-radius:99px; border:1.5px solid var(--border); text-decoration:none;">View all certificates →</a>
     </div>
   </section>
 

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificates — Arezoo Izadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --cream:      #FDFBF6;
+    --warm-white: #FAF7F0;
+    --parchment:  #F0EBE0;
+    --border:     #E2D9C8;
+    --gold:       #C9A96E;
+    --gold-dark:  #A07840;
+    --ink:        #1E1B16;
+    --ink-mid:    #3D3830;
+    --ink-light:  #6B6356;
+    --ink-faint:  #9A9288;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(253,251,246,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+  .nav-back {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold-dark); }
+  .nav-back::before { content: '←'; }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* ── Page ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── Hero ── */
+  .page-hero {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+  .eyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.75rem;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  h1 em { font-style: italic; color: var(--gold-dark); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--ink-light);
+    max-width: 520px;
+    line-height: 1.75;
+  }
+
+  /* ── Cert grid ── */
+  .cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+    margin-bottom: 6rem;
+  }
+
+  /* ── Cert card ── */
+  .cert-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .cert-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(30,27,22,0.09);
+  }
+
+  /* Coloured top accent per card */
+  .cert-accent {
+    height: 4px;
+    width: 100%;
+  }
+  .accent-calarts  { background: linear-gradient(90deg, #00AEEF, #005F8E); }
+  .accent-ucdavis  { background: linear-gradient(90deg, #C99700, #002855); }
+  .accent-litlog   { background: linear-gradient(90deg, #4A3828, #A07840); }
+  .accent-enlight  { background: linear-gradient(90deg, #7A4A9A, #C94B4B); }
+
+  .cert-body { padding: 1.75rem 1.75rem 1.5rem; }
+
+  .cert-issuer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+  .cert-issuer {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+  }
+  .cert-year {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    background: var(--parchment);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+
+  .cert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .cert-type-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    margin-bottom: 1rem;
+  }
+
+  .cert-desc-preview {
+    font-size: 13.5px;
+    color: var(--ink-light);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+    /* placeholder text — will be filled when descriptions arrive */
+  }
+
+  .cert-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  .cert-view-link {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+  .cert-view-link::after { content: '→'; }
+  .cert-pdf-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    text-decoration: none;
+    background: var(--warm-white);
+    transition: background 0.2s, color 0.2s;
+  }
+  .cert-pdf-btn:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ════════════════════════════════
+     DETAIL OVERLAY
+  ════════════════════════════════ */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(30,27,22,0.55);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .overlay.open { display: flex; }
+
+  .detail-panel {
+    background: var(--cream);
+    border-radius: 20px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(30,27,22,0.2);
+    position: relative;
+  }
+
+  .detail-accent {
+    height: 5px;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .detail-body { padding: 2.5rem; }
+
+  .detail-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--warm-white);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-light);
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .detail-close:hover { background: var(--parchment); }
+
+  .detail-issuer {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .detail-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .detail-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-meta-item {
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .detail-meta-item::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .detail-desc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .detail-desc {
+    font-size: 14.5px;
+    color: var(--ink-mid);
+    line-height: 1.85;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .detail-placeholder {
+    background: var(--parchment);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    font-size: 13px;
+    color: var(--ink-faint);
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    padding: 12px 24px;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { background: var(--gold-dark); }
+  .btn-secondary {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 12px 24px;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    text-decoration: none;
+    transition: border-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--ink-light); }
+  .footer-note { font-size: 11px; color: var(--ink-faint); }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .page { padding: 0 1.1rem; }
+    .cert-grid { grid-template-columns: 1fr; }
+    .page-hero { padding: 3rem 0 2.5rem; }
+    h1 { font-size: 2.2rem; }
+    .detail-body { padding: 1.5rem; }
+    .detail-title { font-size: 1.4rem; }
+    footer { padding: 1.5rem 1.1rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="index.html" class="nav-back">Portfolio</a>
+  <span class="nav-title">Certificates</span>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <span class="eyebrow">Education &amp; credentials</span>
+    <h1>Certificates &amp; <em>Experience</em></h1>
+    <p class="hero-sub">A selection of completed courses, programmes, and professional experience. Click any card to read more, or open the certificate directly.</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="cert-grid">
+
+    <!-- 1 — Story & Narrative Design -->
+    <div class="cert-card" onclick="openDetail('narrative')">
+      <div class="cert-accent accent-calarts"></div>
+      <div class="cert-body">
+        <div class="cert-issuer-row">
+          <span class="cert-issuer">CalArts · Coursera</span>
+          <span class="cert-year">2025</span>
+        </div>
+        <p class="cert-title">Story and Narrative Development for Video Games</p>
+        <span class="cert-type-tag">Course Certificate</span>
+        <p class="cert-desc-preview">Narrative structure, character development, and world-building for interactive media — through the California Institute of the Arts.</p>
+        <div class="cert-cta">
+          <span class="cert-view-link">Read more</span>
+          <a href="cert-narrative.pdf" target="_blank" class="cert-pdf-btn" onclick="event.stopPropagation()">View certificate ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 — SEO Fundamentals -->
+    <div class="cert-card" onclick="openDetail('seo')">
+      <div class="cert-accent accent-ucdavis"></div>
+      <div class="cert-body">
+        <div class="cert-issuer-row">
+          <span class="cert-issuer">UC Davis · Coursera</span>
+          <span class="cert-year">2025</span>
+        </div>
+        <p class="cert-title">Google SEO Fundamentals</p>
+        <span class="cert-type-tag">Course Certificate</span>
+        <p class="cert-desc-preview">Search engine optimisation principles, keyword strategy, and content performance — authorised by the University of California, Davis.</p>
+        <div class="cert-cta">
+          <span class="cert-view-link">Read more</span>
+          <a href="cert-seo.pdf" target="_blank" class="cert-pdf-btn" onclick="event.stopPropagation()">View certificate ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 — Litlog Internship -->
+    <div class="cert-card" onclick="openDetail('litlog')">
+      <div class="cert-accent accent-litlog"></div>
+      <div class="cert-body">
+        <div class="cert-issuer-row">
+          <span class="cert-issuer">Georg-August-Universität Göttingen</span>
+          <span class="cert-year">2023</span>
+        </div>
+        <p class="cert-title">Litlog — Editorial Internship</p>
+        <span class="cert-type-tag">Professional Experience</span>
+        <p class="cert-desc-preview">Six-month internship at Litlog, the university's student cultural journalism publication — writing, editing, and contributing to social media.</p>
+        <div class="cert-cta">
+          <span class="cert-view-link">Read more</span>
+          <a href="cert-litlog.pdf" target="_blank" class="cert-pdf-btn" onclick="event.stopPropagation()">View letter ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 — ENLIGHT -->
+    <div class="cert-card" onclick="openDetail('enlight')">
+      <div class="cert-accent accent-enlight"></div>
+      <div class="cert-body">
+        <div class="cert-issuer-row">
+          <span class="cert-issuer">ENLIGHT · University of Göttingen</span>
+          <span class="cert-year">2023</span>
+        </div>
+        <p class="cert-title">Illuminating the Role of AI in Today's Written World</p>
+        <span class="cert-type-tag">Certificate of Participation</span>
+        <p class="cert-desc-preview">International, intercultural virtual exchange exploring AI tools in academic writing — in collaboration with Ghent University and the University of Tartu.</p>
+        <div class="cert-cta">
+          <span class="cert-view-link">Read more</span>
+          <a href="cert-enlight.pdf" target="_blank" class="cert-pdf-btn" onclick="event.stopPropagation()">View certificate ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page -->
+
+<!-- ════════════════════════════════
+     DETAIL OVERLAYS
+════════════════════════════════ -->
+
+<!-- Narrative -->
+<div class="overlay" id="detail-narrative" onclick="closeOnBg(event, 'narrative')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-calarts"></div>
+    <button class="detail-close" onclick="closeDetail('narrative')">✕</button>
+    <div class="detail-body">
+      <span class="detail-issuer">California Institute of the Arts · Coursera</span>
+      <h2 class="detail-title">Story and Narrative Development for Video Games</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Course Certificate</span>
+        <span class="detail-meta-item">April 2025</span>
+        <span class="detail-meta-item">Coursera · Verified</span>
+      </div>
+      <span class="detail-desc-label">About this certificate</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what the course covered, what you built or created, what you took away from it. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="cert-narrative.pdf" target="_blank" class="btn-primary">↗ Open certificate</a>
+        <a href="https://coursera.org/verify/DJVI676KLDQ9" target="_blank" class="btn-secondary">Verify on Coursera</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEO -->
+<div class="overlay" id="detail-seo" onclick="closeOnBg(event, 'seo')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-ucdavis"></div>
+    <button class="detail-close" onclick="closeDetail('seo')">✕</button>
+    <div class="detail-body">
+      <span class="detail-issuer">University of California, Davis · Coursera</span>
+      <h2 class="detail-title">Google SEO Fundamentals</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Course Certificate</span>
+        <span class="detail-meta-item">November 2025</span>
+        <span class="detail-meta-item">Coursera · Verified</span>
+      </div>
+      <span class="detail-desc-label">About this certificate</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what the course covered, what you built or created, what you took away from it. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="cert-seo.pdf" target="_blank" class="btn-primary">↗ Open certificate</a>
+        <a href="https://coursera.org/verify/V5VH2D6305FM" target="_blank" class="btn-secondary">Verify on Coursera</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Litlog -->
+<div class="overlay" id="detail-litlog" onclick="closeOnBg(event, 'litlog')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-litlog"></div>
+    <button class="detail-close" onclick="closeDetail('litlog')">✕</button>
+    <div class="detail-body">
+      <span class="detail-issuer">Georg-August-Universität Göttingen · Litlog</span>
+      <h2 class="detail-title">Editorial Internship at Litlog</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Professional Experience</span>
+        <span class="detail-meta-item">April – September 2023</span>
+        <span class="detail-meta-item">Cultural Journalism</span>
+      </div>
+      <span class="detail-desc-label">About this experience</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what you wrote, edited, and contributed during the internship. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="cert-litlog.pdf" target="_blank" class="btn-primary">↗ Open reference letter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENLIGHT -->
+<div class="overlay" id="detail-enlight" onclick="closeOnBg(event, 'enlight')">
+  <div class="detail-panel">
+    <div class="detail-accent accent-enlight"></div>
+    <button class="detail-close" onclick="closeDetail('enlight')">✕</button>
+    <div class="detail-body">
+      <span class="detail-issuer">ENLIGHT · University of Göttingen, Ghent University, University of Tartu</span>
+      <h2 class="detail-title">Illuminating the Role of AI in Today's Written World</h2>
+      <div class="detail-meta">
+        <span class="detail-meta-item">Certificate of Participation</span>
+        <span class="detail-meta-item">April – May 2023</span>
+        <span class="detail-meta-item">International Virtual Exchange</span>
+      </div>
+      <span class="detail-desc-label">About this programme</span>
+      <div class="detail-placeholder">
+        ✏️ Your description will go here — what you worked on, what teams you collaborated with, what you created. Share your notes whenever you're ready and I'll polish them.
+      </div>
+      <div class="detail-actions">
+        <a href="cert-enlight.pdf" target="_blank" class="btn-primary">↗ Open certificate</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-name">Arezoo Izadi</span>
+  <span class="footer-note">Narrative Designer · 2025</span>
+</footer>
+
+<script>
+  function openDetail(id) {
+    document.getElementById('detail-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDetail(id) {
+    document.getElementById('detail-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeOnBg(event, id) {
+    if (event.target === event.currentTarget) closeDetail(id);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.overlay.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
