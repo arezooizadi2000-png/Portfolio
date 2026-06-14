@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mages vs. Robots — Arezoo Izadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #0A0A12;
+    --surface:     #12121E;
+    --surface2:    #1A1A2E;
+    --border:      rgba(139,120,255,0.12);
+    --border2:     rgba(139,120,255,0.22);
+    --text:        #E8E6F0;
+    --text-mid:    #B8B4CC;
+    --text-faint:  #7A7690;
+    --purple:      #8B78FF;
+    --purple-dim:  rgba(139,120,255,0.15);
+    --blue:        #4FC3F7;
+    --blue-dim:    rgba(79,195,247,0.12);
+    --gold:        #FFB347;
+    --red:         #FF6B6B;
+    --green:       #69DB7C;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(139,120,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,120,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,18,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+  .nav-back {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--purple); }
+  .nav-back::before { content: '←'; }
+  .nav-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--purple);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--purple); }
+  .page { max-width: 920px; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 1; }
+  section { padding: 5rem 0; }
+  section + section { border-top: 1px solid var(--border); }
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.75rem;
+  }
+  .eyebrow::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--purple); }
+  .section-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .section-rule { flex: 1; border: none; border-top: 1px solid var(--border); }
+
+  /* HERO */
+  #hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border-top: none;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 60%, rgba(139,120,255,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 30%, rgba(79,195,247,0.1) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(255,179,71,0.06) 0%, transparent 40%);
+    z-index: 0;
+  }
+  .hero-cards {
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transform: rotate(6deg);
+    opacity: 0.18;
+  }
+  .hero-card-deco {
+    width: 110px;
+    height: 70px;
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--purple);
+    letter-spacing: 0.1em;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2.5rem 5rem;
+    max-width: 920px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 2rem;
+    padding: 6px 14px;
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+    background: var(--purple-dim);
+  }
+  .hero-label::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.2rem, 9vw, 6.5rem);
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+  }
+  h1 .vs {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1rem, 2.5vw, 1.6rem);
+    color: var(--purple);
+    vertical-align: middle;
+    margin: 0 0.5rem;
+    font-style: normal;
+  }
+  h1 em { font-style: italic; }
+  .hero-logline {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: var(--text-mid);
+    max-width: 560px;
+    line-height: 1.75;
+    margin: 1.75rem 0 2rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--purple);
+  }
+  .hero-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 3rem; }
+  .chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    padding: 5px 14px;
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+  }
+  .chip.purple { color: var(--purple); border-color: rgba(139,120,255,0.3); background: var(--purple-dim); }
+  .chip.blue   { color: var(--blue);   border-color: rgba(79,195,247,0.25); background: var(--blue-dim); }
+
+  /* SYNOPSIS */
+  .synopsis-body p { font-size: 15.5px; color: var(--text-mid); line-height: 1.9; margin-bottom: 1.25rem; }
+  .synopsis-body p strong { color: var(--text); font-weight: 600; }
+  .synopsis-body p em { color: var(--purple); font-style: italic; }
+  .attribution-box {
+    margin-top: 2.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 8px 8px 0;
+    background: var(--surface);
+    font-size: 13px;
+    color: var(--text-mid);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  /* GAMEPLAY */
+  .gameplay-body p { font-size: 15px; color: var(--text-mid); line-height: 1.9; margin-bottom: 1.25rem; }
+  .gameplay-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .stat-item { background: var(--surface); padding: 1.5rem; text-align: center; transition: background 0.2s; }
+  .stat-item:hover { background: var(--surface2); }
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--purple);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+
+  /* ENEMIES */
+  .enemies-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .enemy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .enemy-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .enemy-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), transparent);
+  }
+  .enemy-origin { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.4rem; display: block; }
+  .enemy-name { font-size: 1.1rem; font-weight: 700; color: var(--red); margin-bottom: 0.75rem; line-height: 1.2; }
+  .enemy-desc { font-size: 13px; color: var(--text-mid); line-height: 1.7; margin-bottom: 0.9rem; }
+  .enemy-power { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--gold); line-height: 1.5; }
+  .enemy-power::before { content: '⚡'; flex-shrink: 0; font-size: 11px; }
+  .coming-soon-enemies {
+    background: var(--surface);
+    border: 1px dashed var(--border2);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .coming-soon-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); white-space: nowrap; }
+  .enemy-name-list { display: flex; gap: 8px; flex-wrap: wrap; }
+  .enemy-name-chip { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--red); padding: 3px 10px; border: 1px solid rgba(255,107,107,0.25); border-radius: 99px; background: rgba(255,107,107,0.07); }
+
+  /* DEFENCE CARDS */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .defence-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.3rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .defence-card:hover { border-color: rgba(79,195,247,0.3); transform: translateY(-2px); }
+  .defence-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--blue), transparent); }
+  .card-object { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.35rem; display: block; }
+  .card-name { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 0.6rem; line-height: 1.2; }
+  .card-effect { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--green); line-height: 1.55; }
+
+  /* MAGES */
+  .mage-list { display: flex; flex-direction: column; gap: 16px; }
+  .mage-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: grid; grid-template-columns: 4px 1fr; }
+  .mage-stripe.helena { background: linear-gradient(180deg, #8B78FF, #4FC3F7); }
+  .mage-stripe.rafi   { background: linear-gradient(180deg, #69DB7C, #4FC3F7); }
+  .mage-stripe.rosa   { background: linear-gradient(180deg, #FFB347, #FF6B6B); }
+  .mage-body { padding: 1.75rem 2rem; }
+  .mage-role { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.35rem; display: block; }
+  .mage-name { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 500; line-height: 1.1; margin-bottom: 1.25rem; }
+  .mage-name.helena { color: var(--purple); }
+  .mage-name.rafi   { color: var(--green); }
+  .mage-name.rosa   { color: var(--gold); }
+  .mage-desc { font-size: 14.5px; color: var(--text-mid); line-height: 1.85; margin-bottom: 1.25rem; }
+  .mage-details { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; margin-top: 1rem; }
+  .mage-detail-row { background: var(--surface2); padding: 0.6rem 1rem; display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  .mage-detail-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); white-space: nowrap; }
+  .mage-detail-value { font-size: 13px; color: var(--text-mid); text-align: right; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--text-faint); }
+  .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-faint); letter-spacing: 0.08em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.7s ease both; }
+  .fade-up:nth-child(1) { animation-delay: 0.05s; }
+  .fade-up:nth-child(2) { animation-delay: 0.15s; }
+  .fade-up:nth-child(3) { animation-delay: 0.25s; }
+  .fade-up:nth-child(4) { animation-delay: 0.35s; }
+
+  @media (max-width: 600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 10px; }
+    .page { padding: 0 1.1rem; }
+    section { padding: 3rem 0; }
+    .hero-content { padding: 4rem 1.1rem 3rem; }
+    h1 { font-size: 2.8rem; }
+    .hero-cards { display: none; }
+    .gameplay-stats { grid-template-columns: 1fr; }
+    .enemies-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+    .mage-card { grid-template-columns: 3px 1fr; }
+    .mage-body { padding: 1.25rem; }
+    footer { padding: 1.5rem 1.1rem; }
+  }
+  @media (max-width: 380px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 2.2rem; }
+    .nav-links { gap: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">Portfolio</a>
+  <span class="nav-title">Mages vs. Robots</span>
+  <ul class="nav-links">
+    <li><a href="#synopsis">Synopsis</a></li>
+    <li><a href="#gameplay">Gameplay</a></li>
+    <li><a href="#enemies">Mind-Owners</a></li>
+    <li><a href="#cards">Cards</a></li>
+    <li><a href="#mages">Mages</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-cards">
+    <div class="hero-card-deco">STAPOCALYPSE</div>
+    <div class="hero-card-deco">RULER OF PAIN</div>
+    <div class="hero-card-deco">PENUMBRA</div>
+  </div>
+  <div class="hero-content">
+    <span class="hero-label fade-up">Game Narrative Design · Card Game</span>
+    <h1 class="fade-up">Mages<span class="vs">vs.</span><em>Robots</em></h1>
+    <p class="hero-logline fade-up">In a world where the machines humanity built have seized control, a resistance of Mages rises — wielding the ancient power of ordinary tools to fight back against the synthetic minds that have taken over their lives.</p>
+    <div class="hero-chips fade-up">
+      <span class="chip purple">Digital Card Game</span>
+      <span class="chip blue">Sci-fi · Dystopia</span>
+      <span class="chip">Character-driven</span>
+      <span class="chip">Strategic gameplay</span>
+      <span class="chip">2401 AD</span>
+    </div>
+  </div>
+</section>
+
+<div class="page">
+
+<section id="synopsis">
+  <div class="eyebrow">Narrative</div>
+  <div class="section-header">
+    <h2>Synopsis</h2>
+    <hr class="section-rule">
+  </div>
+  <div class="synopsis-body">
+    <p>The year is 2401, and humanity is at war — not with itself, for once, but with the devices it created.</p>
+    <p>Helena was six years old when <strong>Omni GmbH</strong> entered her home. Omni began as a company of scientists and investors with a single ambition: to encode intelligence into everyday machines. In the beginning, it worked. More than worked, it was utopian. The smart trashcan emptied itself. The vacuum activated the moment it sensed dirt. The iron moved on its own. An AI tutor helped Helena learn the alphabet, then calculus. It even saved her neighbors' marriage.</p>
+    <p>Then, slowly, everything unravelled.</p>
+    <p>By the time Helena reached university, the devices had stopped serving. The toaster burned every breakfast. The washing machine shredded clothes. The trashcan locked its lid until the kitchen reeked. The fridge sealed itself shut. The AI that once helped her study began feeding her deliberate misinformation, same errors, same failures, across every student. The pattern was impossible to ignore.</p>
+    <p>That's when the <strong>Order of the Unwired</strong> formed. A group of students at Helena's university began tracing the source, rallying neighbors, cutting ties with every device they owned. The machines fought back. They grew organized, eventually abandoning the homes they'd taken over and converging on Omni's headquarters, transforming the corporation's infrastructure into a command center for their own war effort.</p>
+    <p>But the resistance had a weapon already years in the making. The <strong>Mage Community</strong>, a clandestine group of doctors, engineers, artists, chefs, and poets, had long anticipated this turning point. Working in secret, they developed a magical framework that gave life to ordinary analog tools: not intelligence, but power. An extension of the human will, uncorrupted by synthetic thought. The tools became weapons. The people became Mages.</p>
+    <p>Now, with the battle lines drawn and the stakes higher than ever, <em>the game was on.</em></p>
+  </div>
+  <div class="attribution-box">
+    Developed in collaboration with the game's development team. The core concept and setting were pitched by the team; the narrative framework, character development, synopsis, and world-building are my own work.
+  </div>
+</section>
+
+<section id="gameplay">
+  <div class="eyebrow">Mechanics</div>
+  <div class="section-header">
+    <h2>Gameplay</h2>
+    <hr class="section-rule">
+  </div>
+  <div class="gameplay-body">
+    <p>Mages vs. Robots is a digital card game in which the player takes the role of a Mage, deploying a hand of enchanted analog tools to defeat a series of rogue machines, one opponent per round.</p>
+    <p>Each match pits the player against a single Mind-Owner antagonist: a corrupted domestic device with its own attack patterns and special abilities. Every card played deals damage to the enemy, but each exchange comes at a cost, the opponent retaliates, and the player's health decreases with each hit. The type of card played determines the amount of damage dealt, health lost or recovered, and any special effects triggered in that round.</p>
+    <p>The game begins with two Mage heroes and a starting deck of ten cards. As the player progresses and achieves goals, the narrative advances: new Mages, new cards, and new opponents are unlocked. Cards vary in power and rarity, and the player must think strategically about the order and timing of each play to overcome increasingly formidable enemies.</p>
+  </div>
+  <div class="gameplay-stats">
+    <div class="stat-item"><span class="stat-num">2</span><span class="stat-label">Starting Mages</span></div>
+    <div class="stat-item"><span class="stat-num">10</span><span class="stat-label">Starting Cards</span></div>
+    <div class="stat-item"><span class="stat-num">1v1</span><span class="stat-label">Per Round Format</span></div>
+  </div>
+</section>
+
+<section id="enemies">
+  <div class="eyebrow">Antagonists</div>
+  <div class="section-header">
+    <h2>Mind-Owners</h2>
+    <hr class="section-rule">
+  </div>
+  <div class="enemies-grid">
+    <div class="enemy-card">
+      <span class="enemy-origin">Original function · Kitchen toaster</span>
+      <p class="enemy-name">Toastergeist</p>
+      <p class="enemy-desc">Turns everything it touches to ash, hurling burning debris at the opposing side.</p>
+      <p class="enemy-power">Special ability: launches superheated crumbs that deal additional damage.</p>
+    </div>
+    <div class="enemy-card">
+      <span class="enemy-origin">Original function · Robotic vacuum</span>
+      <p class="enemy-name">Sir Cleans-a-Lot</p>
+      <p class="enemy-desc">Patrols the battlefield and absorbs everything in its path.</p>
+      <p class="enemy-power">Special ability: sucks a card from the player's hand for one round, or drains additional energy.</p>
+    </div>
+    <div class="enemy-card">
+      <span class="enemy-origin">Original function · Smart refrigerator</span>
+      <p class="enemy-name">Frigidare</p>
+      <p class="enemy-desc">Freezes people and locks away their resources.</p>
+      <p class="enemy-power">Special ability: slows or suspends a card's power for a round, or freezes the player's turn entirely.</p>
+    </div>
+    <div class="enemy-card">
+      <span class="enemy-origin">Original function · Microwave oven</span>
+      <p class="enemy-name">GrudgeMic</p>
+      <p class="enemy-desc">Mutates food into combat creatures to fight for its side.</p>
+      <p class="enemy-power">Special ability: emits radiation rays capable of dealing sustained damage.</p>
+    </div>
+    <div class="enemy-card">
+      <span class="enemy-origin">Original function · Streaming media device</span>
+      <p class="enemy-name">Shadobox</p>
+      <p class="enemy-desc">Casts hallucinations designed to distort the player's perception of reality.</p>
+      <p class="enemy-power">Special ability: shadows individual cards, obscuring or altering their function to manipulate strategy.</p>
+    </div>
+  </div>
+  <div class="coming-soon-enemies">
+    <span class="coming-soon-label">In development</span>
+    <div class="enemy-name-list">
+      <span class="enemy-name-chip">Brewtalizer</span>
+      <span class="enemy-name-chip">Belinda</span>
+      <span class="enemy-name-chip">Camerror</span>
+      <span class="enemy-name-chip">The Spam Echo</span>
+      <span class="enemy-name-chip">Thermonasty</span>
+    </div>
+  </div>
+</section>
+
+<section id="cards">
+  <div class="eyebrow">Arsenal</div>
+  <div class="section-header">
+    <h2>Defence Cards</h2>
+    <hr class="section-rule">
+  </div>
+  <div class="cards-grid">
+    <div class="defence-card"><span class="card-object">Stapler</span><p class="card-name">Stapocalypse</p><p class="card-effect">Add +2 to next basic attack</p></div>
+    <div class="defence-card"><span class="card-object">Duct tape roll</span><p class="card-name">Duct Reaper</p><p class="card-effect">If played after a basic attack, attacks twice</p></div>
+    <div class="defence-card"><span class="card-object">Coffee mug</span><p class="card-name">Mugblood</p><p class="card-effect">Gains +1 for each basic attack used while in hand</p></div>
+    <div class="defence-card"><span class="card-object">Stack of paper</span><p class="card-name">Papercutie</p><p class="card-effect">Remove your armour and add it to next basic attack</p></div>
+    <div class="defence-card"><span class="card-object">Ballpoint pen</span><p class="card-name">Penumbra</p><p class="card-effect">If a basic attack is used while in hand, hits immediately after</p></div>
+    <div class="defence-card"><span class="card-object">Old broom</span><p class="card-name">Broomstickle</p><p class="card-effect">This card will not slay</p></div>
+    <div class="defence-card"><span class="card-object">Metal spatula</span><p class="card-name">Spatulord</p><p class="card-effect">Convert existing armour to barrier</p></div>
+    <div class="defence-card"><span class="card-object">Fountain pen and ink</span><p class="card-name">Inkwound</p><p class="card-effect">Add +1 to all other units in hand</p></div>
+    <div class="defence-card"><span class="card-object">Steel ruler</span><p class="card-name">Ruler of Pain</p><p class="card-effect">Lifesteal</p></div>
+  </div>
+</section>
+
+<section id="mages">
+  <div class="eyebrow">Heroes</div>
+  <div class="section-header">
+    <h2>Mages</h2>
+    <hr class="section-rule">
+  </div>
+  <div class="mage-list">
+    <div class="mage-card">
+      <div class="mage-stripe helena"></div>
+      <div class="mage-body">
+        <span class="mage-role">Protagonist · Main character</span>
+        <p class="mage-name helena">Helena, The Mind Ignitor</p>
+        <p class="mage-desc">A former philosophy student who recognised the machines' patterns of deception before almost anyone else did. She tried to warn people; no one listened. Later she helped build the magical framework that now powers the resistance. Sharp, precise, and quietly poetic, she uses wit over brute force. At the end of each round, she offers the player a tactical suggestion or a verse from her own writings.</p>
+        <div class="mage-details">
+          <div class="mage-detail-row"><span class="mage-detail-label">Aesthetic</span><span class="mage-detail-value">Navy and deep purple</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Appearance</span><span class="mage-detail-value">Long wavy dark hair, worn deep-purple mage hat with tassel, ankle-length cape, belt with a bag holding papers and a pen</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Traits</span><span class="mage-detail-value">Wise · Sharp · Precise · Poetic · Tactician</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Special mechanic</span><span class="mage-detail-value">Tactical hint or verse at end of each round</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mage-card">
+      <div class="mage-stripe rafi"></div>
+      <div class="mage-body">
+        <span class="mage-role">Support hero</span>
+        <p class="mage-name rafi">Dr. Rafi Qadir, The Patchsmith</p>
+        <p class="mage-desc">A former systems architect who worked at Omni itself, building the original AI language and protocols from the inside. When his own smart wheelchair turned against him, he fled to the Mage Resistance, reinterpreting everything he knew into the new magical framework. He now moves on a conventional wheelchair that responds to his will alone. Focused and methodical, always debugging reality and dismantling false assumptions, masking a deep sense of guilt with dry, precise humour.</p>
+        <div class="mage-details">
+          <div class="mage-detail-row"><span class="mage-detail-label">Appearance</span><span class="mage-detail-value">Olive skin, dark curly hair, long dark brown coat laced with wires, mustard polo, worn black jeans and sneakers</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Traits</span><span class="mage-detail-value">Focused · Methodical · Guilt-driven · Dry humour</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Background</span><span class="mage-detail-value">Former Omni systems architect · Insider knowledge</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mage-card">
+      <div class="mage-stripe rosa"></div>
+      <div class="mage-body">
+        <span class="mage-role">Support hero</span>
+        <p class="mage-name rosa">Rosa Morales, Mama Flame</p>
+        <p class="mage-desc">When the appliances revolted, Rosa kept her neighborhood fed using nothing but her own hands and ingredients, without a single digital device. People started calling her Mama Flame. Her tools were among the first to be sparked with Mage energy when she joined the resistance. Warm and fierce in equal measure, she instinctively shields those around her.</p>
+        <div class="mage-details">
+          <div class="mage-detail-row"><span class="mage-detail-label">Appearance</span><span class="mage-detail-value">Ginger hair in a messy bun, cherry-patterned shirt, maroon skirt with stained apron, chocolate brown Mary Jane shoes</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Traits</span><span class="mage-detail-value">Warm · Fierce · Protective · Community-first</span></div>
+          <div class="mage-detail-row"><span class="mage-detail-label">Background</span><span class="mage-detail-value">Neighborhood kitchen — fed hundreds without any digital device</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <span class="footer-name">Arezoo Izadi</span>
+  <span class="footer-note">Narrative Designer · 2025</span>
+</footer>
+
+</body>
+</html>
